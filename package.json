@@ -1,0 +1,10 @@
+{
+  "name": "playwright-sdet-framework",
+  "version": "1.0.0",
+  "description": "SDET framework using Playwright and TypeScript for UI and API test automation",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
