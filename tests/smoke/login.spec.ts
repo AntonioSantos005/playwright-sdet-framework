@@ -4,42 +4,41 @@ import { DashboardPage } from '../../src/pages/dashboard.page';
 import { env } from '../../src/config/environments';
 
 test.describe('Login', () => {
-    test('should allow an admin user to log in successfully @smoke', async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        const dashboardPage = new DashboardPage(page);
+  let loginPage: LoginPage;
 
-        await loginPage.goto();
-        await loginPage.assertLoginPageLoaded();
-        await loginPage.login(env.username, env.password);
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
 
-        await expect(page).toHaveURL(/dashboard/i);
-        await dashboardPage.assertLoaded();
-    });
+    await loginPage.goto();
+    await loginPage.assertLoginPageLoaded();
+  });
 
-    test('should display an error message for invalid credentials @smoke', async ({ page }) => {
-        const loginPage = new LoginPage(page);
+  test('should allow an admin user to log in successfully @smoke', async ({ page }) => {
+    const dashboardPage = new DashboardPage(page);
 
-        await loginPage.goto();
-        await loginPage.assertLoginPageLoaded();
-        await loginPage.login('invalid-user', 'invalid-password');
+    await loginPage.login(env.username, env.password);
 
-        await loginPage.assertInvalidCredentialsMessage();
-    });
+    await expect(page).toHaveURL(/dashboard/i);
+    await dashboardPage.assertLoaded();
+  });
 
-    test('should allow the user to log out successfully @smoke', async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        const dashboardPage = new DashboardPage(page);
+  test('should display an error message for invalid credentials @smoke', async () => {
+    await loginPage.login('invalid-user', 'invalid-password');
 
-        await loginPage.goto();
-        await loginPage.assertLoginPageLoaded();
-        await loginPage.login(env.username, env.password);
+    await loginPage.assertInvalidCredentialsMessage();
+  });
 
-        await expect(page).toHaveURL(/dashboard/i);
-        await dashboardPage.assertLoaded();
+  test('should allow the user to log out successfully @smoke', async ({ page }) => {
+    const dashboardPage = new DashboardPage(page);
 
-        await dashboardPage.logout();
+    await loginPage.login(env.username, env.password);
 
-        await expect(page).toHaveURL(/auth\/login/i);
-        await loginPage.assertLoginPageLoaded();
-    });
+    await expect(page).toHaveURL(/dashboard/i);
+    await dashboardPage.assertLoaded();
+
+    await dashboardPage.logout();
+
+    await expect(page).toHaveURL(/auth\/login/i);
+    await loginPage.assertLoginPageLoaded();
+  });
 });
