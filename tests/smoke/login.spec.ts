@@ -4,25 +4,42 @@ import { DashboardPage } from '../../src/pages/dashboard.page';
 import { env } from '../../src/config/environments';
 
 test.describe('Login', () => {
-  test('should allow an admin user to log in successfully @smoke', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
+    test('should allow an admin user to log in successfully @smoke', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const dashboardPage = new DashboardPage(page);
 
-    await loginPage.goto();
-    await loginPage.assertLoginPageLoaded();
-    await loginPage.login(env.username, env.password);
+        await loginPage.goto();
+        await loginPage.assertLoginPageLoaded();
+        await loginPage.login(env.username, env.password);
 
-    await expect(page).toHaveURL(/dashboard/i);
-    await dashboardPage.assertLoaded();
-  });
-});
+        await expect(page).toHaveURL(/dashboard/i);
+        await dashboardPage.assertLoaded();
+    });
 
-test('should display an error message for invalid credentials @smoke', async ({ page }) => {
-  const loginPage = new LoginPage(page);
+    test('should display an error message for invalid credentials @smoke', async ({ page }) => {
+        const loginPage = new LoginPage(page);
 
-  await loginPage.goto();
-  await loginPage.assertLoginPageLoaded();
-  await loginPage.login('invalid-user', 'invalid-password');
+        await loginPage.goto();
+        await loginPage.assertLoginPageLoaded();
+        await loginPage.login('invalid-user', 'invalid-password');
 
-  await loginPage.assertInvalidCredentialsMessage();
+        await loginPage.assertInvalidCredentialsMessage();
+    });
+
+    test('should allow the user to log out successfully @smoke', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const dashboardPage = new DashboardPage(page);
+
+        await loginPage.goto();
+        await loginPage.assertLoginPageLoaded();
+        await loginPage.login(env.username, env.password);
+
+        await expect(page).toHaveURL(/dashboard/i);
+        await dashboardPage.assertLoaded();
+
+        await dashboardPage.logout();
+
+        await expect(page).toHaveURL(/auth\/login/i);
+        await loginPage.assertLoginPageLoaded();
+    });
 });
