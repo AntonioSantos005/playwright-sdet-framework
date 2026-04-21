@@ -3,7 +3,25 @@
   "version": "1.0.0",
   "description": "SDET framework using Playwright and TypeScript for UI and API test automation",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+
+    "test:smoke": "playwright test tests/smoke",
+
+    "test:login": "playwright test tests/smoke/login.spec.ts",
+
+    "test:admin": "playwright test tests/smoke/admin.spec.ts",
+
+    "test:pim": "playwright test tests/smoke/pim.spec.ts",
+
+    "test:navigation": "playwright test tests/smoke/navigation.spec.ts",
+
+    "test:headed": "playwright test --headed",
+
+    "report": "playwright show-report",
+
+    "typecheck": "tsc --noEmit"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
