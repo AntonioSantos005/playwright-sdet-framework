@@ -9,7 +9,9 @@ export class AdminPage {
 
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { name: 'Admin' });
-    this.usernameInput = page.getByRole('textbox').nth(1);
+    this.usernameInput = page
+        .locator('.oxd-input-group', { has: page.locator('label', { hasText: 'Username' }) })
+        .locator('input');
     this.searchButton = page.getByRole('button', { name: 'Search' });
     this.resetButton = page.getByRole('button', { name: 'Reset' });
     this.resultsTable = page.locator('.oxd-table');

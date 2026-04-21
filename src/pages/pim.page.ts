@@ -9,7 +9,9 @@ export class PimPage {
 
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { name: 'PIM' });
-    this.employeeNameInput = page.getByRole('textbox', { name: 'Type for hints...' }).first();
+    this.employeeNameInput = page
+      .locator('.oxd-input-group', { has: page.locator('label', { hasText: 'Employee Name' }) })
+      .locator('input');
     this.searchButton = page.getByRole('button', { name: 'Search' });
     this.resetButton = page.getByRole('button', { name: 'Reset' });
     this.resultsContainer = page.locator('.oxd-table');
